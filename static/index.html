@@ -15,30 +15,13 @@
     <div class="container mt-5 p-5 bg-secondary" style="max-width: 500px; border-radius: 15px;">
         <form action="/" method="POST" id="form">
             <div class="form-group">
-                <input type="email" placeholder="E-mail" class="form-control" name="input_email">
+                <input type="email" placeholder="E-mail" class="form-control" name="email">
             </div>
             <div class="form-group">
-                <input type="password" placeholder="Password" class="form-control" name="input_password">
+                <input type="password" placeholder="Password" class="form-control" name="password">
             </div>
             <button type="submit" class="btn btn-success">Submit</button>
         </form>
     </div>
-    <script>
-        $(document).ready(() => {
-            $("#form").submit((e) => {
-                e.preventDefault()
-                $.ajax({
-                    url : "/",
-                    type : "post",
-                    contentType : "application/json",
-                    data : JSON.stringify($("#form").serializeArray()),
-                    success : (response) => {
-                        console.log("Successfully got response")
-                        console.log(response)
-                    }
-                })
-            })
-        })
-    </script>
 </body>
 </html>
