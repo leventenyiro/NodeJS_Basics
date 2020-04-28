@@ -1,27 +1,28 @@
-const readline = require("readline")
-const rl = readline.createInterface({input : process.stdin, output : process.stdout})
-let num1 = Math.floor((Math.random() * 10) + 1)
-let num2 = Math.floor((Math.random() * 10) + 1)
-let answer = num1 + num2
+var fs = require("fs")
 
-rl.question(`What is ${ num1 } + ${ num2 }?\n`, (userInput) => {
-    //console.log(userInput)
-    if (userInput.trim() == answer)
-        rl.close()
+fs.writeFile("valami.txt", "ez egy valami", err => {
+    if (err) throw err;
     else {
-        rl.setPrompt("Wrong! Try again!\n")
-        rl.prompt()
-        rl.on("line", (userInput) => {
-            if (userInput.trim() == answer)
-                rl.close()
-            else {
-                rl.setPrompt(`Your answer of ${ userInput } is incorrect, try again\n`)
-                rl.prompt()
-            }
+        console.log("File successfully created")
+        fs.readFile("valami.txt", "utf8", (err, file) => {
+            if (err) throw err
+            else
+                console.log(file)
         })
     }
 })
 
-rl.on("close", () => {
-    console.log("Correct!")
+fs.rename("valami.txt", "valami2.txt", (err) => {
+    if (err) throw err
+    else console.log("Successful rename")
+})
+
+fs.appendFile("valami.txt", ". Some data being appended.", (err) => {
+    if (err) throw err
+    console.log("Successful append")
+})
+
+fs.unlink("valami.txt", (err) => {
+    if (err) throw err
+    else console.log("Successfully deleted")
 })
