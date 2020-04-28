@@ -1,11 +1,11 @@
-var fs = require("fs")
-var zlib = require("zlib")
-var gzip = zlib.createGzip()
-var readStream = fs.createReadStream("./valami.txt", "utf8")
-var writeStream = fs.createWriteStream("valami2.txt.gz")
-readStream.pipe(gzip).pipe(writeStream)
+var http = require("http")
+var server = http.createServer((req, res) => {
+    /*res.write("Hello world from nodejs")
+    res.end()*/
+    if (req.url === "/")
+        res.end("Hello world from nodejs")
+    else
+        res.end("Using some other domain")
+})
 
-var gunzip = zlib.createGunzip()
-readStream = fs.createReadStream("./valami2.txt.gz")
-writeStream = fs.createWriteStream("valami3.txt")
-readStream.pipe(gunzip).pipe(writeStream)
+server.listen(8080)
