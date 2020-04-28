@@ -1,28 +1,32 @@
 var fs = require("fs")
-
-fs.writeFile("valami.txt", "ez egy valami", err => {
-    if (err) throw err;
+fs.mkdir("tutorial", (err) => {
+    if (err) throw err
     else {
-        console.log("File successfully created")
-        fs.readFile("valami.txt", "utf8", (err, file) => {
+        fs.writeFile("./tutorial/valami.txt", "123", (err) => {
             if (err) throw err
-            else
-                console.log(file)
+            else console.log("Successful file create")
         })
     }
 })
 
-fs.rename("valami.txt", "valami2.txt", (err) => {
+fs.unlink("./tutorial/valami.txt", (err) => {
     if (err) throw err
-    else console.log("Successful rename")
+    else {
+        fs.rmdir("tutorial", (err) => {
+            if (err) throw err
+            else console.log("Successful folder delete")
+        })
+    }
 })
 
-fs.appendFile("valami.txt", ". Some data being appended.", (err) => {
+fs.readdir("tutorial", (err, files) => {
     if (err) throw err
-    console.log("Successful append")
-})
-
-fs.unlink("valami.txt", (err) => {
-    if (err) throw err
-    else console.log("Successfully deleted")
+    else {
+        for (var file of files) {
+            fs.unlink("./tutorial/" + file, (err) => {
+                if (err) throw err
+                else console.log("Successful delete files")
+            })
+        }
+    }
 })
