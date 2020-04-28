@@ -1,6 +1,11 @@
 var fs = require("fs")
+var zlib = require("zlib")
+var gzip = zlib.createGzip()
 var readStream = fs.createReadStream("./valami.txt", "utf8")
-var writeStream = fs.createWriteStream("valami2.txt")
-readStream.on("data", (chunk) => {
-    writeStream.write(chunk) 
-})
+var writeStream = fs.createWriteStream("valami2.txt.gz")
+readStream.pipe(gzip).pipe(writeStream)
+
+var gunzip = zlib.createGunzip()
+readStream = fs.createReadStream("./valami2.txt.gz")
+writeStream = fs.createWriteStream("valami3.txt")
+readStream.pipe(gunzip).pipe(writeStream)
