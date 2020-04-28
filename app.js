@@ -1,41 +1,33 @@
-var express = require("express")
-var path = require("path")
 var Joi = require("joi")
-var bodyParser = require("body-parser")
-var app = express()
+var arrayString = ["banana", "bacon", "cheese"]
+var arrayObjects = [{example: "example1"}, {example: "example2"}]
 
-app.use("/public", express.static(path.join(__dirname, "static")))
-app.use(bodyParser.urlencoded({extended: false}))
+var userInput = { personalInfo: {
+                    streetAddress: "12312",
+                    city: "fdsf",
+                    state: "af"
+                },
+                preferences : arrayObjects};
+                //preferences : arrayString};
 
-app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "static", "index.html"))
+var personalInfoSchema = Joi.object().keys({
+    streetAddress : Joi.string().trim().required(),
+    city : Joi.string().trim().required(),
+    state: Joi.string().trim().length(2).required()
 })
 
-app.post("/", (req, res) => {
-    console.log(req.body)
-    var schema = Joi.object().keys({
-        email: Joi.string().trim().email().required(),
-        password: Joi.string().min(5).max(10).required()
-    })
-    Joi.validate(req.body, schema, (err, result) => {
-        if (err) {
-            console.log(err)
-            res.send("An error has occured")
-        } else {
-            console.log(result)
-            res.send("Successfully posted data")
-        }
-    })
+var preferencesSchema = Joi.array().items(Joi.object().keys({
+    example: Joi.string().required()
+}))
+
+//var preferencesSchema = Joi.array().items(Joi.string())
+
+var schema = Joi.object().keys({
+    personalInfo: personalInfoSchema,
+    preferences: preferencesSchema
 })
 
-app.get("/example", (req, res) => {
-    res.send("Hitting example route")
+Joi.validate(userInput, schema, (err, result) => {
+    if (err) throw err
+    else console.log(result)
 })
-
-app.get("/example/:name/:age", (req, res) => {
-    console.log(req.params)
-    console.log(req.query)
-    res.send(req.params.name + " : " + req.params.age)
-})
-
-app.listen(8080)
