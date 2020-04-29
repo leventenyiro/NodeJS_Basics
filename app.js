@@ -1,15 +1,12 @@
 var express = require("express")
-var bodyparser = require("body-parser")
+var path = require("path")
 var app = express()
 
-app.use(bodyparser.json())
-app.use(/* "/example", */(req, res, next) => {
-    //console.log(req.url, req.method)
-    req.banana = "banana"
-    next()
-})
+app.use("/public", express.static(path.join(__dirname, "static")))
+app.set("view engine", "ejs")
 
-app.get("/", (req, res) => {
-    console.log(req.banana)
-    res.send("Middleware")
-}).listen(8080)
+var people = require("./routes/people")
+
+app.use("/people", people)
+
+app.listen(8080)
